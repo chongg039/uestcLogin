@@ -1,3 +1,5 @@
+module.exports = function (cbk) {
+
 var getCookie = require('./mockLandOperation.js');
 var request = require('request');
 var cheerio = require('cheerio');
@@ -79,7 +81,7 @@ getCookie(function (err, cookies) {
 				});
 				var temp = course[5].replace(/简介/g, "");
 				var pmet = temp.replace(/(^\s+)|(\s+$)/g, "");
-				console.log('课程：' + course[2] + ' ' + '教师：' + pmet.replace(/\s/g, "") + ' ' + '学分：' + course[3]);
+				return cbk(null, '课程：' + course[2] + ' ' + '教师：' + pmet.replace(/\s/g, "") + ' ' + '学分：' + course[3]);
 				// $(this).find('td').each(function (n, some) {
 				// 	course[n] = $(this).text();
 				// 	//console.log(course[n]);
@@ -93,3 +95,5 @@ getCookie(function (err, cookies) {
 
 	});
 })
+
+}

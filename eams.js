@@ -1,3 +1,5 @@
+module.exports = function (cbk) {
+
 var getCookie = require('./mockLandOperation.js');
 var request = require('request');
 var cheerio = require('cheerio');
@@ -23,10 +25,12 @@ getCookie(function (err, cookies) {
 	};
 
 	request(eamsOptions, function (err, res, body) {
-		console.log(body);
+		// console.log(body);
+		return cbk(null, body);
 		// app.get('/', function (req, res) {
 		// 	res.send(body);
 		// });
 	});
 })
+}
 
