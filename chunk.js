@@ -6,7 +6,6 @@ var requestt = request.defaults({followRedirect: false});
 
 getCookie(function (err, cookies) {
 	const baseUrl = 'http://eams.uestc.edu.cn/eams/';
-
 	// 下面是所有学年成绩
 	var allGradesOptions = {
 		url: baseUrl + 'courseTableForStd.action?_=1465456078624',
@@ -60,7 +59,7 @@ getCookie(function (err, cookies) {
 	}
 
 	request(semesterOptions, function (err, res, body) {
-		//console.log(body);
+		//console.log(res);
 		// app.get('/', function (req, res) {
 		// 	res.send(body);
 		// });
@@ -72,17 +71,22 @@ getCookie(function (err, cookies) {
 				//console.log(title[i]);
 		});
 
-		$('tbody').find('td').each(function (i, elem) {
-				// $(this).find('td').each(function (x, ele) {
-				// 	course[x] = $(this).find('title').text();
-				// 	console.log(course[x]);
-				// });
+		$('tbody').find('tr').each(function (i, elem) {
+				$(this).find('td').each(function (x, ele) {
+					course[x] = $(this).text();
+					// console.log(course[x]);
+					// console.log('--------------------------');
+				});
+				var temp = course[5].replace(/简介/g, "");
+				var pmet = temp.replace(/(^\s+)|(\s+$)/g, "");
+				console.log('课程：' + course[2] + ' ' + '教师：' + pmet.replace(/\s/g, "") + ' ' + '学分：' + course[3]);
 				// $(this).find('td').each(function (n, some) {
 				// 	course[n] = $(this).text();
 				// 	//console.log(course[n]);
 				// })
-				course[i] = $(this).text();
-				console.log(course[i]);
+				// course[i] = $(this).text();
+				// console.log(course[i]);
+				// pmet.replace(/\s/g, "")
 		});	
 	});
 
