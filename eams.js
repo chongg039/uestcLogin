@@ -9,7 +9,7 @@ getCookie(function (err, cookies) {
 	const baseUrl = 'http://eams.uestc.edu.cn/eams/';
 
 	const eamsOptions = {
-		url: baseUrl + 'stdExamTable!examTable.action?examType.id=2&semester.id=123',
+		url: baseUrl + 'stdExamTable!examTable.action?examType.id=1&semester.id=123',
 		method: 'GET',
 		headers: {
 			'Accept':'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
@@ -26,7 +26,15 @@ getCookie(function (err, cookies) {
 
 	request(eamsOptions, function (err, res, body) {
 		// console.log(body);
-		return cbk(null, body);
+		var $ = cheerio.load(body);
+		var eamsSplit = [];
+		var eamsTable = [];
+		$('table[class=formTable]').find('tr').each(function (i, elem) {
+			eamsSplit[i] = $(this).text().replace(/(\t)|(^\s*)|(\s*$)/g,'');
+			eamsTable[i] = eamsSplit[i].replace(/(\n)|(\r)/g, '');
+		})
+
+		return cbk(null, eamsTable);
 		// app.get('/', function (req, res) {
 		// 	res.send(body);
 		// });

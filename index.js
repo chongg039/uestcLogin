@@ -54,26 +54,30 @@ getCookie(function (err, cookies) {
 	//console.log(cookies);
 
 	// console.log(chalk.green('Welcome, ' + user + '!'));
+	if (cookies) {
 
-	items = ['查询本学期课程', '查询期末考试安排', '查询所有成绩'];
-	selectItem = readlineSync.keyInSelect(items,'请选择' + ': ');
-	console.log(items[selectItem]);
-	//console.log(items[1]);
-	//console.log(items[selectItem] = items[1]);
-	if (items[selectItem] == items[0]) {
-		getCourse(function (err, callback) {
-			console.log(callback);
-		})
-	} else if (items[selectItem] == items[1]) {
-		getFinalEams(function (err, callback) {
-			console.log(callback);
-		})
-	} else if (items[selectItem] == items[2]) {
-		getAllGrades(function (err, callback) {
-			console.log(callback);
-		})
+		items = ['查询本学期课程', '查询期末考试安排', '查询所有成绩'];
+		selectItem = readlineSync.keyInSelect(items,'请选择' + ': ');
+		console.log(items[selectItem]);
+		//console.log(items[1]);
+		//console.log(items[selectItem] = items[1]);
+		if (items[selectItem] == items[0]) {
+			getCourse(function (err, callback) {
+				console.log(callback);
+			})
+		} else if (items[selectItem] == items[1]) {
+			getFinalEams(function (err, callback) {
+				console.log(callback);
+			})
+		} else if (items[selectItem] == items[2]) {
+			getAllGrades(function (err, callback) {
+				console.log(callback);
+			})
+		} else {
+			console.log('已退出');
+		}
 	} else {
-		console.log('已退出');
+		console.log('登录失败，请重试');
 	}
 	// Authorization ... 
 	//command = readlineSync.prompt();

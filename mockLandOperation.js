@@ -30,7 +30,8 @@ module.exports = function(cbk){
 			//console.log(Cookies1);
 			//console.log(lt);
 		} else { 
-			console.log(err);
+			console.log("暂时无法访问信息门户，请稍后重试");
+			//return cbk(null, err);
 		}
 
 		var loginOption = {
@@ -63,12 +64,17 @@ module.exports = function(cbk){
 		};
 
 		request(loginOption, function (err, res, body) {
-			//console.log(res.headers);
-			//获取重定向地址
-			redirectLocation = res.headers['location'];
-			//console.log(redirectLocation);
-			redirectCookies = res.headers['set-cookie'][1];
-			//console.log(redirectCookies);
+			if (!err && res.statusCode == 302) {
+				//console.log(res.headers);
+				//获取重定向地址
+				redirectLocation = res.headers['location'];
+				//console.log(redirectLocation);
+				redirectCookies = res.headers['set-cookie'][1];
+				//console.log(redirectCookies);
+			} else {
+				console.log("登录失败！请检查学号和密码重试");
+				//return cbk(null, err);
+			}
 
 			request(redirectLocation, function (err, res, body) {
 				//console.log(res.headers);
@@ -99,56 +105,9 @@ module.exports = function(cbk){
 					//console.log(body);
 					
 					var eamsCookies = finalCookies + ";" + 'semester.id=123;';
-					return cbk(null, eamsCookies);					
+					return cbk(null, eamsCookies);
+										
 
-					// // 下面是获取本学期期末考试情况
-					// var eamsOptions = {
-					// 	url: baseUrl + 'stdExamTable!examTable.action?examType.id=2&semester.id=123',
-					// 	method: 'GET',
-					// 	headers: {
-					// 		'Accept':'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-					// 		'Accept-Encoding':'deflate, sdch', // don't use gzip!!! else the content may be messied
-					// 		'Accept-Language':'zh-CN,zh;q=0.8',
-					// 		'Cache-Control':'no-cache',
-					// 		'Connection':'keep-alive',
-					// 		'Cookie':eamsCookies,
-					// 		'Host':'eams.uestc.edu.cn',
-					// 		'Upgrade-Insecure-Requests':1,
-					// 		'User-Agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.98 Safari/537.36'
-					// 	}
-					// };
-
-					// request(eamsOptions, function (err, res, eamsbody) {
-					// 	console.log(eamsbody);
-					// 	// app.get('/', function (req, res) {
-					// 	// 	res.send(body);
-					// 	// });
-					// });
-
-					// // 下面是所有学年成绩
-					// var gradesOptions = {
-					// 	url: baseUrl + 'teach/grade/course/person!historyCourseGrade.action?projectType=MAJOR',
-					// 	method: 'GET',
-					// 	headers: {
-					// 		'Accept':'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-					// 		'Accept-Encoding':'deflate, sdch', // don't use gzip!!! else the content may be messied
-					// 		'Accept-Language':'zh-CN,zh;q=0.8',
-					// 		'Cache-Control':'no-cache',
-					// 		'Connection':'keep-alive',
-					// 		'Pragma':'no-cache',
-					// 		'Cookie':eamsCookies,
-					// 		'Host':'eams.uestc.edu.cn',
-					// 		'Upgrade-Insecure-Requests':1,
-					// 		'User-Agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.98 Safari/537.36'
-					// 	}
-					// };
-
-					// request(gradesOptions, function (err, res, body) {
-					// 	console.log(body);
-					// 	// app.get('/', function (req, res) {
-					// 	// 	res.send(body);
-					// 	// });
-					// });
 				});
 			});
 		});

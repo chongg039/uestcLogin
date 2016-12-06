@@ -27,10 +27,27 @@ getCookie(function (err, cookies) {
 
 	request(allGradesOptions, function (err, res, body) {
 		//console.log(body);
-		return cbk(null, body);
+		//return cbk(null, body);
 		// app.get('/', function (req, res) {
 		// 	res.send(body);
 		// });
+		var $ = cheerio.load(body);
+		var gather = [];
+		var gatherItems = [];
+		var gatherSplit = [];
+		$('.gridhead').find('th').each(function (i, elem) {
+			gather[i] = $(this).text();
+		})
+		$('.gridtable').find('tbody').find('tr').each(function (i, elem) {
+			//gatherItems[i] = $(this).text();
+			gatherSplit[i] = $(this).text().replace(/\t/g,'');
+			gatherItems[i] = gatherSplit[i].replace(/(\n)|(\r)/g, ' ');
+			// $(this).find('td').each(function (n, ele) {
+			// 	gatherSplit[i]
+			// })
+		})
+		return cbk(null, gatherItems);
+		
 	});
 })
 }
